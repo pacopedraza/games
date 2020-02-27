@@ -28,11 +28,22 @@ class GameAlienInvasion:
         This function will be the loop for the game.
         """
         while True:
+            self._check_events()
+            self._update_screen()
+            # Draw again the screen during each pass through the loop.
+
+        def _check_events(self):
+            """
+            Respond to keypresses and mouse events.
+            """
             for event in pygame.event.get(): # Mouse and keyboard events
                 if event.type == pygame.QUIT:
                     sys.exit()
 
-                # Draw again the screen durin each pass through the loop.
+        def _update_screen(self):
+            """
+            Update images on the screen, and flip to the new screen.
+            """
             self.screen.fill(self.settings.bg_color)
             self.ship.blitme()
 
