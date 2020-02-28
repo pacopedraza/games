@@ -32,22 +32,28 @@ class GameAlienInvasion:
             self._update_screen()
             # Draw again the screen during each pass through the loop.
 
-        def _check_events(self):
-            """
-            Respond to keypresses and mouse events.
-            """
-            for event in pygame.event.get(): # Mouse and keyboard events
-                if event.type == pygame.QUIT:
-                    sys.exit()
+    def _check_events(self):
+        """
+        Respond to keypresses and mouse events.
+        """
+        for event in pygame.event.get(): # Mouse and keyboard events
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT:
+                    self.ship.moving_right = True
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_RIGHT:
+                    self.ship.moving_right = False
 
-        def _update_screen(self):
-            """
-            Update images on the screen, and flip to the new screen.
-            """
-            self.screen.fill(self.settings.bg_color)
-            self.ship.blitme()
+    def _update_screen(self):
+        """
+        Update images on the screen, and flip to the new screen.
+        """
+        self.screen.fill(self.settings.bg_color)
+        self.ship.blitme()
 
-            pygame.display.flip() # Display the screen
+        pygame.display.flip() # Display the screen
 
 if __name__ == '__main__':
     # Creating game instance, then run the game
