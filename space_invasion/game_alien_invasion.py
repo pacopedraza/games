@@ -38,7 +38,7 @@ class GameAlienInvasion:
             # Ship position will be updated after we've checked for
             # keyboard events and before we updated the screen.
             self.ship.update()
-            self.bullets.update()
+            self._update_bullets()
             self._update_screen()
             # Draw again the screen during each pass through the loop.
 
@@ -72,8 +72,9 @@ class GameAlienInvasion:
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
     def _update_screen(self):
         """
@@ -85,6 +86,18 @@ class GameAlienInvasion:
             bullet.draw_bullet()
 
         pygame.display.flip() # Display the screen
+
+    def _update_bullets(self):
+        """Update position of bullets and get rid of old bullets."""
+        # Update bullet position.
+        # Below we will control to get rid of the bullets that have
+        # Dissapear.
+        self.bullets.update()
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+        # print(len(self.bullets))
+
 
 if __name__ == '__main__':
     # Creating game instance, then run the game
