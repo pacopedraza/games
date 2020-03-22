@@ -1,9 +1,9 @@
 import sys
 import pygame
-
+from alien import Alien
+from bullet import Bullet
 from settings import Settings
 from ship import Ship
-from bullet import Bullet
 
 class GameAlienInvasion:
     """
@@ -22,12 +22,13 @@ class GameAlienInvasion:
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
 
-        #self.screen = pygame.display.set_mode(
-        #        (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
 
     def launch_game(self):
         """
@@ -84,6 +85,7 @@ class GameAlienInvasion:
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        self.aliens.draw(self.screen)
 
         pygame.display.flip() # Display the screen
 
@@ -97,6 +99,28 @@ class GameAlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
         # print(len(self.bullets))
+
+    def _create_fleet(self):
+        """Create the fleet of our enemies (aliens)"""
+        # Let's make our alien :)
+        alien = Alien(self)
+        alien_width = alien.rect.width
+        # We need an empty margin on either side of the screen.
+        # We will make this marginthe width of one alien.
+        # Because we have two margins, the available space for aliens in
+        # The screen width minus two aliens widths.
+        available_space_x = self.settings.screen_width - (2 * alien_width)
+        # We use floor division (//), wich divides two numbers and drops any
+        # remainder, so we'll get an integer number of aliens.
+        number_aliens_x = available_space_x // (2 * alien_width)
+
+        # Create the first row of the aliens.
+        for alien_number in range(number_aliens_x):
+            # Create an alien and place it in the damn row.
+            alien = Alien(self)
+            alien.x = alien_width + 2 * alien_width * alien_number
+            alien.rect.x = alien.x
+            self.aliens.add(alien)
 
 
 if __name__ == '__main__':
